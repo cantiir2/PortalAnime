@@ -141,7 +141,7 @@ func (s *ContentService) GetContentByGenre(genreID uint, page, pageSize int) ([]
 
 // GetContentByCategory gets content by category
 func (s *ContentService) GetContentByCategory(categoryID uint, page, pageSize int) ([]models.Content, int64, error) {
-	return s.contentRepo.FindByCategory(categoryID, page, pageSize, "Episodes", "Genres", "Categories", "StreamLinks", "DownloadLinks")
+	return s.contentRepo.FindByCategory(categoryID, page, pageSize, "Episodes", "Genres", "Categories", "Season", "StreamLinks", "DownloadLinks")
 }
 
 // AddGenreToContent adds a genre to content

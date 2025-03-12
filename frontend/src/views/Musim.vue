@@ -139,11 +139,17 @@ const fetchContents = async (reset = false) => {
 
     const params = {
       page: currentPage.value,
-      pageSize: 12,
-      season: selectedSeason.value
+      pageSize: 12
+    }
+
+    // Only add season parameter if a season is selected
+    if (selectedSeason.value) {
+      params.season = selectedSeason.value
+      console.log('Fetching contents with season:', selectedSeason.value)
     }
 
     const response = await axios.get('/api/contents', { params })
+    console.log('API Response:', response.data)
     
     if (reset) {
       contents.value = response.data.contents

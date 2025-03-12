@@ -335,6 +335,22 @@ func (h *ContentHandler) List(c *gin.Context) {
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
 	pageSize, _ := strconv.Atoi(c.DefaultQuery("pageSize", "12"))
 
+	// Build filters
+	filters := make(map[string]interface{})
+
+	// Handle season filter
+	if seasonID := c.Query("season"); seasonID != "" {
+		if id, err := strconv.ParseUint(seasonID, 10, 32); err == nil {
+			filters["season_id"] = uint(id)
+			log.Printf("Filtering content by season_id: %d", id)
+		}
+	}
+
+	// Handle content type filter
+	if contentType := c.Query("type"); contentType != "" {
+		filters["type"] = contentType
+	}
+
 	// Check for categoryId parameter
 	if categoryIDStr := c.Query("categoryId"); categoryIDStr != "" {
 		categoryID, err := strconv.ParseUint(categoryIDStr, 10, 32)
@@ -354,12 +370,6 @@ func (h *ContentHandler) List(c *gin.Context) {
 			"pageSize": pageSize,
 		})
 		return
-	}
-
-	// Build filters for other cases
-	filters := make(map[string]interface{})
-	if contentType := c.Query("type"); contentType != "" {
-		filters["type"] = contentType
 	}
 
 	contents, total, err := h.contentService.ListContent(page, pageSize, filters)

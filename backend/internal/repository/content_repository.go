@@ -56,7 +56,9 @@ func (r *ContentRepository) List(page, pageSize int, filters map[string]interfac
 	// Apply filters
 	if filters != nil {
 		for key, value := range filters {
-			query = query.Where(key, value)
+			// Log the filter being applied
+			log.Printf("Applying filter: %s = %v", key, value)
+			query = query.Where(key+" = ?", value)
 		}
 	}
 
